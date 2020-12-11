@@ -39,17 +39,6 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        <li class="nav-item">
-                                    <a class="nav-link" href="/">Home</a>
-                                    <li class="nav-item">            
-                                    <a class="nav-link" href="/services">Services</a>
-                                    <li class="nav-item">
-                                    <a class="nav-link" href="/posts">Blog</a>
-                                </li>
-                                    <li class="nav-item">
-                                    <a class="nav-link" href="/about">About</a>
-                                </li>
-                                
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -86,7 +75,7 @@
             </div>
         </nav>
 
-        <main class="py-4 container">
+        <main class="py-4">
             @yield('content')
         </main>
     </div>
