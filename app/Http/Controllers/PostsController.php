@@ -8,6 +8,17 @@ use DB;
 
 class PostsController extends Controller
 {
+
+     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth', ['except'=> ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -42,10 +53,28 @@ class PostsController extends Controller
         $this ->validate($request,[
             'title' => 'required',
             'body' => 'required',
+            'cover_image' => 'image|nullable|max:1999'
         ]); 
+        //handle the file upload
+        if($request->hasFile('cover_image')){
+            //get filename with the extensions
+            $filenameWithExt +$request->file('cover_image')->getClientOriginalImage();
+            //get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            //get just ext
+            $extension =$request->file('cover_image')->getClientOriginalExtension();
+            //filename to store
+            $fileNameToStore = $filename .'_'.time().'.'.$extension;
+            //upload image
+            $path = $request->file('cover_image')->storeAs('public/cover_image', $fileNameToStore);
+        }else{
+          $fileNameToStore='noimage.jpeg';  
+        }
         $post = new Post;
         $post->title = $request->input('title');
         $post->body = $request->input('body');
+        $post->user_id = auth()->user()->id;
+        $post->cover_image = $fileNameToStore;
         $post->save();
         return redirect('/posts')->with('success','Post created.'); 
 
@@ -72,6 +101,11 @@ class PostsController extends Controller
     public function edit($id)
     {
         $post= Post::find($id);
+        if(auth()->user()->id !== $post->user_id){
+          return redirect('/posts')->with('error', 'Unauthorised page.'); 
+
+        }
+        
         return view('posts.edit')->with('post', $post);
     }
 
@@ -105,6 +139,11 @@ class PostsController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
+
+        if(auth()->user()->id !== $post->user_id){
+            return redirect('/posts')->with('error', 'Unauthorised page.'); 
+              
+          }
         $post->delete();
         return redirect('/posts')->with('success', 'post removed');
     

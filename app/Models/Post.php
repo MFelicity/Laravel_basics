@@ -13,5 +13,8 @@ class Post extends Model
     //public $primaryKey = 'id';
     //timestamps
     //public $timestamp = false;
+    public function user(){
+        return $this ->belongsTo(App\Models\User);
+    }
     use HasFactory;
 }

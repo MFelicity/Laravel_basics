@@ -34,11 +34,29 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
 
+                     <li class="nav-item">
+                        <a class="nav-link" href="/posts/create">Add Post</a>
+                     </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+
+                         <li class="nav-item">
+                            <a class="nav-link" href="/services">Services</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="/posts">Blog</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="/about">About</a>
+                        </li>
+                    
+
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -75,7 +93,8 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-4 container">
+            @include('inc.messages')
             @yield('content')
         </main>
     </div>
